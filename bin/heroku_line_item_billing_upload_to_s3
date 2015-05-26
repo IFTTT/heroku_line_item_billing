@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+#
+require 'csv'
+require 'aws-sdk'
+require 'heroku_line_item_billing'
+
+all_apps = HerokuLineItemBilling::App.all
+line_items = all_apps.map do |app|
+  puts "Retrieving information for #{app.name}..."
+  app.line_items(5.minutes)
+end.flatten(1)
+puts "Adding headers..."
+line_items.unshift(HerokuLineItemBilling::App.line_item_headers)
+puts "Creating CSV..."
+
+csv_string = CSV.generate(:force_quotes => true) { |csv| line_items.each { |item| csv << item } }
+puts "Uploading to S3..."
+s3 = Aws::S3::Resource.new
+obj = s3.bucket(ENV['AWS_BUCKET']).object(ENV['AWS_OBJECT_KEY'] + Time.now.strftime('/%Y/%m/%d/%H%M.csv'))
+
+obj.put(body: csv_string)
+puts "Uploaded!"
