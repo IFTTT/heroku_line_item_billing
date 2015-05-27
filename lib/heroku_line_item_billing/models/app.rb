@@ -23,7 +23,7 @@ module HerokuLineItemBilling
     end
 
     def self.line_item_headers
-      column_names = [
+      [
         "productname",
         "cost",
         "user:project",
@@ -36,24 +36,22 @@ module HerokuLineItemBilling
     def line_items(unit_of_time)
       app_credit = [[
         "heroku:dyno:legacy-free",
-        one_free_dyno_per_unit_of_time(unit_of_time)
+        one_free_dyno_per_unit_of_time(unit_of_time) / 100.to_f
       ]]
       formation_line_items = formations.map do |formation|
         [
           "heroku:dyno:#{formation.type}",
-          formation.price_per_unit_of_time(unit_of_time)
+          formation.price_per_unit_of_time(unit_of_time) / 100.to_f
         ]
       end
       addons_line_items = addons.map do |addon|
         [
           "heroku:addon:#{addon.plan.name}",
-          addon.price_per_unit_of_time(unit_of_time)
+          addon.price_per_unit_of_time(unit_of_time) / 100.to_f
         ]
       end
 
-      all_line_items = app_credit + formation_line_items + addons_line_items
-      greater_than_zero_line_items = all_line_items.select{|item|item[1] > 0}
-      final_line_items = greater_than_zero_line_items.map do |item|
+      (app_credit + formation_line_items + addons_line_items).map do |item|
         item + [
           config_vars.TAG_PROJECT || name,
           config_vars.TAG_ENVIRONMENT || "production",
@@ -61,7 +59,6 @@ module HerokuLineItemBilling
           Time.now.strftime("%Y-%m-%d %H:59:59")
         ]
       end
-      final_line_items
     end
   end
 end
