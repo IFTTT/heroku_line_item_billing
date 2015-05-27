@@ -3,7 +3,7 @@ module HerokuLineItemBilling
     PRICES = {
       "1x" => {"cents" => 5, "unit" => "hour"},
       "2x" => {"cents" => 10, "unit" => "hour"},
-      "2x" => {"cents" => 80, "unit" => "hour"},
+      "px" => {"cents" => 80, "unit" => "hour"},
       "standard-1x" => {"cents" => 2500, "unit" => "month"},
       "standard-2x" => {"cents" => 5000, "unit" => "month"},
       "performance" => {"cents" => 50000, "unit" => "month"},
