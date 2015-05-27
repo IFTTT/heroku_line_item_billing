@@ -26,6 +26,7 @@ Or install it yourself as:
     AWS_SECRET_ACCESS_KEY=<KEY> \
     AWS_BUCKET=<BUCKET_NAME> \
     AWS_OBJECT_KEY=<FOLDER_NAME> \
+    TIME_PERIOD_MINUTES=<MINUTES> \
     ./bin/heroku_line_item_billing_upload_to_s3
 
 ## Contributing

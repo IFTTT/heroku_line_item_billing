@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#
+
 require 'csv'
 require 'aws-sdk'
 require 'heroku_line_item_billing'
@@ -7,7 +7,7 @@ require 'heroku_line_item_billing'
 all_apps = HerokuLineItemBilling::App.all
 line_items = all_apps.map do |app|
   puts "Retrieving information for #{app.name}..."
-  app.line_items(5.minutes)
+  app.line_items(ENV['TIME_PERIOD_MINUTES'].to_i.minutes)
 end.flatten(1)
 puts "Adding headers..."
 line_items.unshift(HerokuLineItemBilling::App.line_item_headers)
