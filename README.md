@@ -2,6 +2,9 @@
 
 Object-ize Heroku Billing API Information and Upload to S3
 
+## Deprecated
+This project is not being developed. Feel free to fork!
+
 ## Installation
 
 Add this line to your application's Gemfile:
